@@ -163,7 +163,7 @@ func dataSourceAwsDirectoryServiceDirectoryRead(d *schema.ResourceData, meta int
 		addresses = flattenStringList(dir.DnsIpAddrs)
 	}
 	if err := d.Set("dns_ip_addresses", addresses); err != nil {
-		fmt.Errorf("error setting dns_ip_addresses: %w", err)
+		return fmt.Errorf("error setting dns_ip_addresses: %w", err)
 	}
 
 	d.Set("name", dir.Name)
