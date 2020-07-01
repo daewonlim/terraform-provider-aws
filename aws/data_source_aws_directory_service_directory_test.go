@@ -2,12 +2,28 @@ package aws
 
 import (
 	"fmt"
+	"regexp"
 	"testing"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/acctest"
 
 	"github.com/hashicorp/terraform-plugin-sdk/helper/resource"
 )
+
+func TestAccDataSourceAwsDirectoryServiceDirectory_NonExistent(t *testing.T) {
+	directoryId := fmt.Sprintf("d-%s", acctest.RandStringFromCharSet(10, "abcdef0123456789"))
+
+	resource.ParallelTest(t, resource.TestCase{
+		PreCheck:  func() { testAccPreCheck(t) },
+		Providers: testAccProviders,
+		Steps: []resource.TestStep{
+			{
+				Config:      testAccDataSourceAwsDirectoryServiceDirectoryConfig_NonExistent(directoryId),
+				ExpectError: regexp.MustCompile(`not found`),
+			},
+		},
+	})
+}
 
 func TestAccDataSourceAwsDirectoryServiceDirectory_SimpleAD(t *testing.T) {
 	alias := acctest.RandomWithPrefix("tf-acc-test")
@@ -91,6 +107,14 @@ func TestAccDataSourceAWSDirectoryServiceDirectory_connector(t *testing.T) {
 			},
 		},
 	})
+}
+
+func testAccDataSourceAwsDirectoryServiceDirectoryConfig_NonExistent(id string) string {
+	return fmt.Sprintf(`
+data "aws_directory_service_directory" "test" {
+	directory_id = "%s"
+}
+`, id)
 }
 
 func testAccDataSourceAwsDirectoryServiceDirectoryConfig_Prerequisites(adType string) string {
