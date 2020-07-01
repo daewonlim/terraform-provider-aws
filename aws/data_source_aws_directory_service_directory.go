@@ -140,7 +140,7 @@ func dataSourceAwsDirectoryServiceDirectoryRead(d *schema.ResourceData, meta int
 		if isAWSErr(err, directoryservice.ErrCodeEntityDoesNotExistException, "") {
 			return fmt.Errorf("DirectoryService Directory (%s) not found", directoryID)
 		}
-		return err
+		return fmt.Errorf("error reading DirectoryService Directory: %w", err)
 	}
 
 	if out == nil || len(out.DirectoryDescriptions) == 0 {
@@ -173,11 +173,11 @@ func dataSourceAwsDirectoryServiceDirectoryRead(d *schema.ResourceData, meta int
 	d.Set("type", dir.Type)
 
 	if err := d.Set("vpc_settings", flattenDSVpcSettings(dir.VpcSettings)); err != nil {
-		return fmt.Errorf("error setting VPC settings: %s", err)
+		return fmt.Errorf("error setting VPC settings: %w", err)
 	}
 
 	if err := d.Set("connect_settings", flattenDSConnectSettings(dir.DnsIpAddrs, dir.ConnectSettings)); err != nil {
-		return fmt.Errorf("error setting connect settings: %s", err)
+		return fmt.Errorf("error setting connect settings: %w", err)
 	}
 
 	d.Set("enable_sso", dir.SsoEnabled)
@@ -192,11 +192,11 @@ func dataSourceAwsDirectoryServiceDirectoryRead(d *schema.ResourceData, meta int
 
 	tags, err := keyvaluetags.DirectoryserviceListTags(conn, d.Id())
 	if err != nil {
-		return fmt.Errorf("error listing tags for Directory Service Directory (%s): %s", d.Id(), err)
+		return fmt.Errorf("error listing tags for Directory Service Directory (%s): %w", d.Id(), err)
 	}
 
 	if err := d.Set("tags", tags.IgnoreAws().IgnoreConfig(ignoreTagsConfig).Map()); err != nil {
-		return fmt.Errorf("error setting tags: %s", err)
+		return fmt.Errorf("error setting tags: %w", err)
 	}
 
 	return nil
