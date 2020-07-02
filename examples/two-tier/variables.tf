@@ -26,3 +26,7 @@ variable "aws_amis" {
     us-west-2 = "ami-8803e0f0"
   }
 }
+
+variable "private_key_path" (
+  default = "./ssh/my_pr.pem"
+)
