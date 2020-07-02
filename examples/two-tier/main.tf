@@ -5,7 +5,7 @@ provider "aws" {
 
 # Create a VPC to launch our instances into
 resource "aws_vpc" "default" {
-  cidr_block = "10.1.0.0/16"
+  cidr_block = "10.2.0.0/16"
 }
 
 # Create an internet gateway to give our subnet access to the outside world
@@ -23,7 +23,7 @@ resource "aws_route" "internet_access" {
 # Create a subnet to launch our instances into
 resource "aws_subnet" "default" {
   vpc_id                  = aws_vpc.default.id
-  cidr_block              = "10.1.1.0/24"
+  cidr_block              = "10.2.1.0/24"
   map_public_ip_on_launch = true
 }
 
