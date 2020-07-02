@@ -110,6 +110,9 @@ resource "aws_instance" "web" {
     user = "ubuntu"
     host = "${self.public_ip}"
     # The connection will use the local SSH agent for authentication.
+    type = "ssh"
+    port = 22
+    private_key = "${file(var.private_key_path)}"
   }
 
   instance_type = "t2.micro"
