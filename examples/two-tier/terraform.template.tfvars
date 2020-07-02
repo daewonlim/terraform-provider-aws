@@ -1,2 +1,4 @@
-key_name        = "terraform-provider-aws-example"
-public_key_path = "~/.ssh/terraform-provider-aws-example.pub"
+aws_sregion = "us-west-2"
+key_name = "terra-mykey01"
+public_key_path = "~/.ssh/terra-mykey01.pub"
+private_key_path = "./ssh/terra-mykey01.pem"
